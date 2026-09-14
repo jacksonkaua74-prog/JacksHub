@@ -1,0 +1,218 @@
+--// GUI STYLE - DARK MENU
+--// Apenas interface, sem funções externas
+
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+
+local player = Players.LocalPlayer
+
+--// ScreenGui
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "DarkMenu"
+ScreenGui.ResetOnSpawn = false
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+
+--// Janela principal
+local Main = Instance.new("Frame")
+Main.Name = "Main"
+Main.Size = UDim2.new(0, 430, 0, 430)
+Main.Position = UDim2.new(0.5, -215, 0.5, -215)
+Main.BackgroundColor3 = Color3.fromRGB(22, 24, 29)
+Main.BorderSizePixel = 0
+Main.Parent = ScreenGui
+
+local Corner = Instance.new("UICorner")
+Corner.CornerRadius = UDim.new(0, 12)
+Corner.Parent = Main
+
+--// Barra superior
+local Top = Instance.new("Frame")
+Top.Size = UDim2.new(1, 0, 0, 70)
+Top.BackgroundColor3 = Color3.fromRGB(27, 29, 35)
+Top.BorderSizePixel = 0
+Top.Parent = Main
+
+local TopCorner = Instance.new("UICorner")
+TopCorner.CornerRadius = UDim.new(0, 12)
+TopCorner.Parent = Top
+
+--// Título
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -30, 0, 35)
+Title.Position = UDim2.new(0, 15, 0, 8)
+Title.BackgroundTransparency = 1
+Title.Text = "Trade Features"
+Title.TextColor3 = Color3.fromRGB(245, 245, 245)
+Title.TextSize = 24
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = Top
+
+--// Subtítulo
+local Subtitle = Instance.new("TextLabel")
+Subtitle.Size = UDim2.new(1, -30, 0, 25)
+Subtitle.Position = UDim2.new(0, 15, 0, 40)
+Subtitle.BackgroundTransparency = 1
+Subtitle.Text = "Made by Macrex & ssb editor"
+Subtitle.TextColor3 = Color3.fromRGB(145, 148, 155)
+Subtitle.TextSize = 14
+Subtitle.Font = Enum.Font.Gotham
+Subtitle.TextXAlignment = Enum.TextXAlignment.Left
+Subtitle.Parent = Top
+
+--// Área com rolagem
+local Scroll = Instance.new("ScrollingFrame")
+Scroll.Name = "Options"
+Scroll.Size = UDim2.new(1, -20, 1, -80)
+Scroll.Position = UDim2.new(0, 10, 0, 75)
+Scroll.BackgroundTransparency = 1
+Scroll.BorderSizePixel = 0
+Scroll.ScrollBarThickness = 5
+Scroll.ScrollBarImageColor3 = Color3.fromRGB(90, 92, 100)
+Scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
+Scroll.Parent = Main
+
+local Layout = Instance.new("UIListLayout")
+Layout.Padding = UDim.new(0, 18)
+Layout.SortOrder = Enum.SortOrder.LayoutOrder
+Layout.Parent = Scroll
+
+local Padding = Instance.new("UIPadding")
+Padding.PaddingTop = UDim.new(0, 10)
+Padding.PaddingBottom = UDim.new(0, 15)
+Padding.Parent = Scroll
+
+--// Atualizar tamanho da rolagem
+Layout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(function()
+	Scroll.CanvasSize = UDim2.new(
+		0,
+		0,
+		0,
+		Layout.AbsoluteContentSize.Y + 25
+	)
+end)
+
+--// Criar opção
+local function CreateToggle(text)
+
+	local Holder = Instance.new("Frame")
+	Holder.Size = UDim2.new(1, -10, 0, 75)
+	Holder.BackgroundTransparency = 1
+	Holder.Parent = Scroll
+
+	local Label = Instance.new("TextLabel")
+	Label.Size = UDim2.new(1, -130, 1, 0)
+	Label.BackgroundTransparency = 1
+	Label.Text = text
+	Label.TextColor3 = Color3.fromRGB(235, 235, 238)
+	Label.TextSize = 21
+	Label.Font = Enum.Font.GothamMedium
+	Label.TextXAlignment = Enum.TextXAlignment.Left
+	Label.Parent = Holder
+
+	--// Toggle
+	local Toggle = Instance.new("TextButton")
+	Toggle.Size = UDim2.new(0, 110, 0, 50)
+	Toggle.Position = UDim2.new(1, -110, 0.5, -25)
+	Toggle.BackgroundColor3 = Color3.fromRGB(48, 50, 57)
+	Toggle.Text = ""
+	Toggle.AutoButtonColor = false
+	Toggle.Parent = Holder
+
+	local ToggleCorner = Instance.new("UICorner")
+	ToggleCorner.CornerRadius = UDim.new(1, 0)
+	ToggleCorner.Parent = Toggle
+
+	--// Bolinha
+	local Circle = Instance.new("Frame")
+	Circle.Size = UDim2.new(0, 42, 0, 42)
+	Circle.Position = UDim2.new(0, 4, 0.5, -21)
+	Circle.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+	Circle.BorderSizePixel = 0
+	Circle.Parent = Toggle
+
+	local CircleCorner = Instance.new("UICorner")
+	CircleCorner.CornerRadius = UDim.new(1, 0)
+	CircleCorner.Parent = Circle
+
+	--// Apenas visual
+	local Enabled = false
+
+	Toggle.MouseButton1Click:Connect(function()
+		Enabled = not Enabled
+
+		if Enabled then
+			Toggle.BackgroundColor3 = Color3.fromRGB(65, 125, 255)
+			Circle.Position = UDim2.new(1, -46, 0.5, -21)
+		else
+			Toggle.BackgroundColor3 = Color3.fromRGB(48, 50, 57)
+			Circle.Position = UDim2.new(0, 4, 0.5, -21)
+		end
+	end)
+
+	return Holder
+end
+
+--// Opções de exemplo
+CreateToggle("Auto Accept")
+CreateToggle("Freeze Trade")
+CreateToggle("Auto Decline")
+CreateToggle("Trade Notifications")
+CreateToggle("Show Details")
+CreateToggle("Auto Close")
+CreateToggle("Dark Mode")
+CreateToggle("Sound Effects")
+
+--// Arrastar a GUI - PC + celular
+local dragging = false
+local dragStart
+local startPos
+
+local function UpdateDrag(input)
+	local delta = input.Position - dragStart
+
+	Main.Position = UDim2.new(
+		startPos.X.Scale,
+		startPos.X.Offset + delta.X,
+		startPos.Y.Scale,
+		startPos.Y.Offset + delta.Y
+	)
+end
+
+Top.InputBegan:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.MouseButton1
+		or input.UserInputType == Enum.UserInputType.Touch then
+
+		dragging = true
+		dragStart = input.Position
+		startPos = Main.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+Top.InputChanged:Connect(function(input)
+
+	if input.UserInputType == Enum.UserInputType.MouseMovement
+		or input.UserInputType == Enum.UserInputType.Touch then
+
+		if dragging then
+			UpdateDrag(input)
+		end
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+
+	if dragging and (
+		input.UserInputType == Enum.UserInputType.MouseMovement
+		or input.UserInputType == Enum.UserInputType.Touch
+	) then
+		UpdateDrag(input)
+	end
+end)
